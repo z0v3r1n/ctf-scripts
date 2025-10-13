@@ -1,0 +1,192 @@
+  1           0 LOAD_CONST               0 (0)
+              2 LOAD_CONST               1 (None)
+              4 IMPORT_NAME              0 (binascii)
+              6 STORE_NAME               0 (binascii)
+
+  2           8 LOAD_CONST               0 (0)
+             10 LOAD_CONST               2 (('array',))
+             12 IMPORT_NAME              1 (array)
+             14 IMPORT_FROM              1 (array)
+             16 STORE_NAME               1 (array)
+             18 POP_TOP
+
+  4          20 LOAD_CONST               3 (3988292384)
+             22 STORE_NAME               2 (poly)
+
+  6          24 LOAD_CONST               4 (2508312701)
+
+  7          26 LOAD_CONST               5 (1231198871)
+
+  8          28 LOAD_CONST               6 (1473663577)
+
+  9          30 LOAD_CONST               7 (1022026391)
+
+ 10          32 LOAD_CONST               8 (4277043751)
+
+ 11          34 LOAD_CONST               9 (1684325040)
+
+  5          36 BUILD_LIST               6
+             38 STORE_NAME               3 (expected)
+
+ 13          40 LOAD_NAME                1 (array)
+             42 LOAD_CONST              10 ('L')
+             44 CALL_FUNCTION            1
+             46 STORE_NAME               4 (table)
+
+ 14          48 LOAD_NAME                5 (range)
+             50 LOAD_CONST              11 (256)
+             52 CALL_FUNCTION            1
+             54 GET_ITER
+        >>   56 FOR_ITER                78 (to 136)
+             58 STORE_NAME               6 (byte)
+
+ 15          60 LOAD_CONST               0 (0)
+             62 STORE_NAME               7 (xxx)
+
+ 16          64 LOAD_NAME                6 (byte)
+             66 STORE_NAME               8 (b)
+
+ 17          68 LOAD_NAME                5 (range)
+             70 LOAD_CONST              12 (8)
+             72 CALL_FUNCTION            1
+             74 GET_ITER
+        >>   76 FOR_ITER                46 (to 124)
+             78 STORE_NAME               9 (bit)
+
+ 18          80 LOAD_NAME                8 (b)
+             82 LOAD_NAME                7 (xxx)
+             84 BINARY_XOR
+             86 LOAD_CONST              13 (1)
+             88 BINARY_AND
+             90 POP_JUMP_IF_FALSE      106
+
+ 19          92 LOAD_NAME                7 (xxx)
+             94 LOAD_CONST              13 (1)
+             96 BINARY_RSHIFT
+             98 LOAD_NAME                2 (poly)
+            100 BINARY_XOR
+            102 STORE_NAME               7 (xxx)
+            104 JUMP_FORWARD             8 (to 114)
+
+ 21     >>  106 LOAD_NAME                7 (xxx)
+            108 LOAD_CONST              13 (1)
+            110 INPLACE_RSHIFT
+            112 STORE_NAME               7 (xxx)
+
+ 22     >>  114 LOAD_NAME                8 (b)
+            116 LOAD_CONST              13 (1)
+            118 INPLACE_RSHIFT
+            120 STORE_NAME               8 (b)
+            122 JUMP_ABSOLUTE           76
+
+ 23     >>  124 LOAD_NAME                4 (table)
+            126 LOAD_METHOD             10 (append)
+            128 LOAD_NAME                7 (xxx)
+            130 CALL_METHOD              1
+            132 POP_TOP
+            134 JUMP_ABSOLUTE           56
+
+ 26     >>  136 LOAD_NAME               11 (str)
+            138 LOAD_NAME               12 (int)
+            140 LOAD_CONST              14 (('string', 'return'))
+            142 BUILD_CONST_KEY_MAP      2
+            144 LOAD_CONST              15 (<code object zzz42 at 0x0000024BBA5EDA80, file "Source.py", line 26>)
+            146 LOAD_CONST              16 ('zzz42')
+            148 MAKE_FUNCTION            4 (annotations)
+            150 STORE_NAME              13 (zzz42)
+
+ 34         152 BUILD_LIST               0
+            154 STORE_NAME              14 (inputs)
+
+ 35         156 LOAD_CONST              17 (True)
+            158 STORE_NAME              15 (ok)
+
+ 37         160 LOAD_NAME                5 (range)
+            162 LOAD_CONST              18 (6)
+            164 CALL_FUNCTION            1
+            166 GET_ITER
+        >>  168 FOR_ITER                62 (to 232)
+            170 STORE_NAME              16 (i)
+
+ 38         172 LOAD_NAME               17 (input)
+            174 LOAD_CONST              19 ('Enter string ')
+            176 LOAD_NAME               16 (i)
+            178 LOAD_CONST              13 (1)
+            180 BINARY_ADD
+            182 FORMAT_VALUE             0
+            184 LOAD_CONST              20 (': ')
+            186 BUILD_STRING             3
+            188 CALL_FUNCTION            1
+            190 STORE_NAME              18 (s)
+
+ 39         192 LOAD_NAME               13 (zzz42)
+            194 LOAD_NAME               18 (s)
+            196 CALL_FUNCTION            1
+            198 LOAD_CONST              21 (4294967295)
+            200 BINARY_AND
+            202 STORE_NAME              19 (zzz)
+
+ 40         204 LOAD_NAME               19 (zzz)
+            206 LOAD_NAME                3 (expected)
+            208 LOAD_NAME               16 (i)
+            210 BINARY_SUBSCR
+            212 COMPARE_OP               3 (!=)
+            214 POP_JUMP_IF_FALSE      220
+
+ 41         216 LOAD_CONST              22 (False)
+            218 STORE_NAME              15 (ok)
+
+ 42     >>  220 LOAD_NAME               14 (inputs)
+            222 LOAD_METHOD             10 (append)
+            224 LOAD_NAME               18 (s)
+            226 CALL_METHOD              1
+            228 POP_TOP
+            230 JUMP_ABSOLUTE          168
+
+ 44     >>  232 LOAD_NAME               15 (ok)
+            234 EXTENDED_ARG             1
+            236 POP_JUMP_IF_FALSE      260
+
+ 45         238 LOAD_NAME               20 (print)
+            240 LOAD_CONST              23 ('FlagY{')
+            242 LOAD_CONST              24 ('_')
+            244 LOAD_METHOD             21 (join)
+            246 LOAD_NAME               14 (inputs)
+            248 CALL_METHOD              1
+            250 BINARY_ADD
+            252 LOAD_CONST              25 ('}')
+            254 BINARY_ADD
+            256 CALL_FUNCTION            1
+            258 POP_TOP
+        >>  260 LOAD_CONST               1 (None)
+            262 RETURN_VALUE
+
+Disassembly of <code object zzz42 at 0x0000024BBA5EDA80, file "Source.py", line 26>:
+ 27           0 LOAD_CONST               1 (4294967295)
+              2 STORE_FAST               1 (value)
+
+ 28           4 LOAD_FAST                0 (string)
+              6 GET_ITER
+        >>    8 FOR_ITER                32 (to 42)
+             10 STORE_FAST               2 (ch)
+
+ 29          12 LOAD_GLOBAL              0 (table)
+             14 LOAD_GLOBAL              1 (ord)
+             16 LOAD_FAST                2 (ch)
+             18 CALL_FUNCTION            1
+             20 LOAD_FAST                1 (value)
+             22 BINARY_XOR
+             24 LOAD_CONST               2 (255)
+             26 BINARY_AND
+             28 BINARY_SUBSCR
+             30 LOAD_FAST                1 (value)
+             32 LOAD_CONST               3 (8)
+             34 BINARY_RSHIFT
+             36 BINARY_XOR
+             38 STORE_FAST               1 (value)
+             40 JUMP_ABSOLUTE            8
+
+ 30     >>   42 LOAD_CONST               4 (-1)
+             44 LOAD_FAST                1 (value)
+             46 BINARY_SUBTRACT
+             48 RETURN_VALUE
