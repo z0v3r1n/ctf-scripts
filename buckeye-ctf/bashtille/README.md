@@ -1,9 +1,11 @@
 ```
 gcc exploit.c -o exploit
 strip exploit
-xxd -p exploit | sed 's/../\\x&/g' > exploit.hex
-python3 -c "print(open('exploit.hex', 'r').read().replace('\n', ''))" > exploit.hex2
-mv exploit.hex2 exploit.hex
+
+python3 - <<'PY' > exploit.hex
+import sys
+sys.stdout.write("".join("\\x%02x"%b for b in open("exploit","rb").read()))
+PY
 
 python3 xpl.py
 ```
