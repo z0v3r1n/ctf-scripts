@@ -1,0 +1,7 @@
+services:
+  stack-prelude-dist:
+    build: .
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+    init: true

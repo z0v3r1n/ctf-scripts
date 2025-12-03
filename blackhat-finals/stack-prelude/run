@@ -1,0 +1,2 @@
+#!/bin/sh
+while true; do /app/chall 5000; sleep 1; done
