@@ -14,10 +14,36 @@ r.send(b'A'*0x100)
 r.sock.shutdown(socket.SHUT_WR)
 	server's recv(MSG_WAITALL) sees EOF before
 	all n bytes arrive, so it stops waiting and returns early.
+	while this works ... it will shutdown your write and you won't be able to exploit the bof
+	but still nice to know for future in case there is a threaded challenge.
 
 r.sock.send(b"!", socket.MSG_OOB) 
 	next byte in the stream becomes “different type” data, which forces recv(MSG_WAITALL) to stop
 	reading normal bytes and return whatever it already collected.
+
+```
+static int tcp_recvmsg_locked(struct sock *sk, struct msghdr *msg, size_t len,
+			      int flags, struct scm_timestamping_internal *tss,
+			      int *cmsg_flags)
+{
+...SNIP...
+	do {
+		...SNIP...
+		/* Are we at urgent data? Stop if we have read anything or have SIGURG pending. */
+		if (unlikely(tp->urg_data) && tp->urg_seq == *seq) {
+			if (copied)
+				break;
+			if (signal_pending(current)) {
+				copied = timeo ? sock_intr_errno(timeo) : -EAGAIN;
+				break;
+			}
+		}
+		...SNIP...
+	} while (len > 0);
+...SNIP...
+}
+```
+https://github.com/torvalds/linux/blob/master/net/ipv4/tcp.c#L2634
 """
 
 r.sock.send(b'!', socket.MSG_OOB)
