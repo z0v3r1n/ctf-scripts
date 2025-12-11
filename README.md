@@ -5,3 +5,4 @@ Also don't forget to look at these awesome resources that inspired this repo:
 - https://bitbucket.org/ptr-yudai
 - https://github.com/7Rocky/CTF-scripts
 - https://github.com/nobodyisnobody/write-ups/
+- https://github.com/sajjadium/ctf-archives/
