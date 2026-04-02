@@ -1,0 +1,13 @@
+services:
+  ponbaby:
+    build: .
+    container_name: ponbaby_container
+    ports:
+      - 45002:5000
+    privileged: true
+    restart: always
+    environment:
+      - JAIL_TIME=300
+      - JAIL_CPU=500
+      - JAIL_MEM=256M
+      - JAIL_PIDS=512
