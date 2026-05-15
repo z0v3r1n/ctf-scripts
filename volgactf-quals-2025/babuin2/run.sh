@@ -10,5 +10,4 @@ qemu-system-x86_64 \
     -cpu qemu64,+smep,+smap \
     -initrd "./initramfs.cpio.gz" \
     -drive file=flag.txt,format=raw \
-    -snapshot \
-    -gdb tcp::12345
+    -snapshot -s
