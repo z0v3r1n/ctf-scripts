@@ -1,0 +1,19 @@
+services:
+  chall:
+    image: cybersecnatlab/challenge-jail@sha256:353d96d97db50e2f24c5f2d998467136b44d1e5f0bfc583b8c88c51b1886f347
+    container_name: Memories
+    restart: unless-stopped
+    init: true
+    privileged: true
+    volumes:
+      - './build/chall:/home/user/chall:ro'
+      - './libs:/home/user/libs:ro'
+    ports:
+      - '1337:1337'
+    environment:
+      - 'NETWORK=true'
+      - 'FLAG=ptm{4bs_sH1t_t0_B1nary_s34rch_d0es_th3_tr1cK_[random 8]}'
+      - 'FORWARD_STDERR=false'
+      - 'SET_RPATH=/home/user/libs'
+      - 'SET_INTERPRETER=/home/user/libs/ld-linux-x86-64.so.2'
+      - 'TIMEOUT=500'
