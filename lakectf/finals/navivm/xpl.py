@@ -23,7 +23,7 @@ int32_t *get_operand_addr(state_t *state, operand_t *operand) {
 }
 '''
 
-io = remote('localhost', 6009)
+io = remote('chall.polygl0ts.ch', 6009)
 
 b  = b''
 
