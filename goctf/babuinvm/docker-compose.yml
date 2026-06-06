@@ -1,0 +1,11 @@
+services:
+  babuinvm:
+    build: .
+    container_name: babuinvm_container
+    ports:
+      - "6702:6702"
+    restart: always
+    pids_limit: 512
+    mem_limit: 256M
+    cpus: 0.5
+
